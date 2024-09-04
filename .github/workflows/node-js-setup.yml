@@ -1,0 +1,30 @@
+# .github/workflows/node-js-setup.yml
+
+name: Build and deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4.0.3
+        with:
+          node-version: '14.x'
+          registry-url: 'https://npm.pkg.github.com/'
+          scope: '@myorg'
+          cache: 'yarn'
+          cache-dependency-path: '**/yarn.lock'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build and deploy
+        run: yarn build && yarn deploy
